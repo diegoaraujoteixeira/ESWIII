@@ -44,3 +44,5 @@ Feature: Catálogo de Produtos
   Scenario: Visualizar lista de produtos
     When eu envio uma requisição GET de listagem de produtos para "/produtos"
     Then o status da resposta da listagem de produtos deve ser 200
+
+    
