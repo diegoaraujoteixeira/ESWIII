@@ -1,7 +1,4 @@
-export type Categoria = {
-  id: number;
-  categoria: string;
-};
+import {Categoria} from "../model/categoria";
 
 let categorias: Categoria[] = [
   {
