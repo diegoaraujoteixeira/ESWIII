@@ -1,0 +1,53 @@
+# Nome exibido na aba "Actions" do GitHub
+name: CI - Testes da API
+
+# Gatilho: o workflow será executado sempre que houver push em qualquer branch do repositório
+on:
+  push:
+    branches:
+      - "**"
+
+# Como o package.json da API está em Ecommerce/apps/api, os comandos npm devem rodar nesse diretório
+defaults:
+  run:
+    working-directory: Ecommerce/apps/api
+
+# Conjunto de etapas executadas na máquina virtual
+jobs:
+  # Nome do job apresentado
+  tests:
+    # O que será mostrado no GitHub Actions
+    name: Build e testes automatizados
+
+    # Ambiente virtual usado pelo GitHub Actions
+    runs-on: ubuntu-latest
+
+    steps:
+      # Baixa o código do repositório para dentro da máquina virtual do GitHub Actions
+      - name: Baixar código do repositório
+        uses: actions/checkout@v4
+
+      # Instala e configura a versão do Node.js usada pela pipeline (o cache do npm acelera execuções futuras reaproveitando dependências já baixadas)
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: Ecommerce/apps/api/package-lock.json
+
+      # Instala as dependências exatamente como descritas no package-lock.json
+      # `npm ci` é recomendado em CI por se rápido, consistente e automatizado
+      - name: Instalar dependências
+        run: npm ci
+
+      # Compila o projeto TypeScript antes dos testes
+      - name: Verificar compilação TypeScript
+        run: npm run build
+
+      # Executa os testes unitários da API
+      - name: Executar testes unitários
+        run: npm run test:unit
+
+      # Executa os testes de aceitação/BDD da API
+      - name: Executar testes BDD
+        run: npm run test:bdd

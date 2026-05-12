@@ -7,7 +7,7 @@
     "dev": "ts-node-dev --respawn --transpile-only src/server.ts",
     "build": "tsc",
     "start": "node dist/server.js",
-    "bdd": "cucumber-js",
+    "test:bdd": "cucumber-js",
     "test:unit": "jest --runInBand",
     "test:unit:watch": "jest --watch"
   },
