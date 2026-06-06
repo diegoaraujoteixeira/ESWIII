@@ -132,20 +132,5 @@ export const carrinhosIniciais: Carrinho[] = [
         quantidade: 1,
       },
     ],
-  },
-  {
-    itens: [
-      {
-        id: 3,
-        nome: "Jaqueta de Couro",
-        preco: 399,
-        estoque: 0,
-        categoria: "Jaquetas",
-        destaque: true,
-        promocao: false,
-        novidade: false,
-        quantidade: 1,
-      },
-    ],
-  },
+  }
 ];

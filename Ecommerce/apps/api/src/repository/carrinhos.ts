@@ -7,6 +7,8 @@ import { Carrinho } from "../model/carrinho";
 
 export interface CarrinhoRepository {
   list(): Promise<Carrinho[]>;
+  findLast(): Promise<Carrinho | undefined>;
+  create(carrinho: Carrinho): Promise<Carrinho>;
   replaceAll(carrinhos: Carrinho[]): Promise<void>;
   clear(): Promise<void>;
 }
@@ -49,6 +51,22 @@ export class MongooseCarrinhoRepository implements CarrinhoRepository {
   async list(): Promise<Carrinho[]> {
     const carrinhos = await CarrinhoMongooseModel.find({}).exec();
     return carrinhos.map(toDomain);
+  }
+
+  async findLast(): Promise<Carrinho | undefined> {
+    const carrinho = await CarrinhoMongooseModel.findOne({})
+      .sort({ createdAt: -1, _id: -1 })
+      .exec();
+
+    return carrinho ? toDomain(carrinho) : undefined;
+  }
+
+  async create(carrinho: Carrinho): Promise<Carrinho> {
+    const novoCarrinho = await CarrinhoMongooseModel.create(
+      toPersistence(carrinho),
+    );
+
+    return toDomain(novoCarrinho);
   }
 
   async replaceAll(carrinhos: Carrinho[]): Promise<void> {
