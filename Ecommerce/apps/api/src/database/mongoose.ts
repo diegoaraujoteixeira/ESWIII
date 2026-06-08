@@ -13,10 +13,12 @@ function getMongoUri(): string {
 }
 
 function getMongoDatabase(): string {
-  return process.env.MONGODB_DATABASE || "ecommerce_dev";
+  return process.env.MONGODB_DATABASE || "ecommerce";
 }
 
-export async function connectDatabase(): Promise<typeof mongoose> {
+export async function connectDatabase(
+  options: mongoose.ConnectOptions = {},
+): Promise<typeof mongoose> {
   if (mongoose.connection.readyState === 1) {
     return mongoose;
   }
@@ -28,6 +30,7 @@ export async function connectDatabase(): Promise<typeof mongoose> {
   connectionPromise = mongoose
     .connect(getMongoUri(), {
       dbName: getMongoDatabase(),
+      ...options,
     })
     .catch((error: unknown) => {
       connectionPromise = null;
